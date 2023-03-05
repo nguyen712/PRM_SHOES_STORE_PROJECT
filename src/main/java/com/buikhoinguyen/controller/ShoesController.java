@@ -7,10 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.buikhoinguyen.dto.ShoesDTO;
 import com.buikhoinguyen.entity.Shoes;
@@ -32,5 +29,20 @@ public class ShoesController {
 	@PostMapping("/createShoes")
 	public ResponseEntity<String> createShoes(@RequestBody ShoesDTO shoes) {
 		return shoesService.createShoes(shoes);
+	}
+
+	@PutMapping("/updateShoes/{shoesId}")
+	public ResponseEntity<String> updateShoes(@PathVariable("shoesId") long shoesId, @RequestBody ShoesDTO shoesDTO) {
+		return shoesService.updateShoes(shoesId, shoesDTO);
+	}
+
+	@DeleteMapping("/deleteShoes/{shoesId}")
+	public ResponseEntity<String> deleteShoes(@PathVariable("shoesId") long shoesId) {
+		boolean shoesIsDelete = shoesService.deleteShoes(shoesId);
+		if (shoesIsDelete) {
+			return ResponseEntity.status(HttpStatus.OK).body("Delete Shoes successfully!");
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Delete failed!!!");
+		}
 	}
 }

@@ -12,4 +12,6 @@ public interface ShoesService {
 	public ResponseEntity<String> createShoes(ShoesDTO shoesDTO);
 
 	public List<ResponseShoesData> getAllShoes();
+	public ResponseEntity<String> updateShoes(long shoesId,ShoesDTO shoesDTO);
+	public boolean deleteShoes(long shoesId);
 }
