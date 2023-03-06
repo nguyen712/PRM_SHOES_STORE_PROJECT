@@ -16,4 +16,5 @@ public class ShoesDTO {
 	private double discount;
 	private String[] colors;
 	private String name;
+	private boolean status;
 }

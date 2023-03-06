@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
+import javax.swing.text.html.Option;
 
+import com.buikhoinguyen.dto.SizeShoesDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -106,8 +108,63 @@ public class ShoesServiceImpl implements ShoesService{
 		}
 		return shoesResponse;
 	}
-	
 
+	@Override
+	public ResponseEntity<String> updateShoes(long shoesId, ShoesDTO shoesDTO) {
+		Optional<Shoes> shoesData = shoesRepository.findById(shoesId);
+		Optional<Category> categoryData = categoryRepository.findById(shoesDTO.getCategoryId());
+		Optional<SizeShoes> sizeShoesData = sizeRepository.findById(shoesDTO.getSizeId());
+		List<String> shoesColor = new ArrayList<>();
+		SizeShoes sizeShoes = new SizeShoes();
+		Category category = new Category();
+		if (sizeShoesData.isPresent()){
+			sizeShoes = sizeShoesData.get();
+		}else {
+			sizeShoes = null;
+		}
+
+		if (categoryData.isPresent()){
+			category = categoryData.get();
+		}else {
+			category = null;
+		}
+		if (shoesData.isPresent()) {
+			if (category == null){
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can not found category");
+			}
+
+			if (sizeShoes == null){
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can not found size of shoes");
+			}
+			Shoes shoes = shoesData.get();
+			shoes.setName(shoesDTO.getName());
+			shoes.setPrice(shoesDTO.getPrice());
+			shoes.setCategory(category);
+			shoes.setSizeShoes(sizeShoes);
+			shoes.setQuanity(shoesDTO.getQuanity());
+			shoes.setDescription(shoesDTO.getDescription());
+			shoes.setDiscount(shoesDTO.getDiscount());
+			shoes.setStatus(shoesDTO.isStatus());
+			for (String color : shoesDTO.getColors()) {
+				shoesColor.add(color);
+			}
+			shoesRepository.save(shoes);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Update shoes successfully");
+		}else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can not found shoes");
+		}
+	}
+
+	@Override
+	public boolean deleteShoes(long shoesId) {
+		Optional<Shoes> shoesData = shoesRepository.findById(shoesId);
+		if (shoesData.isPresent()) {
+			Shoes shoes = shoesData.get();
+			shoesRepository.delete(shoes);
+			return true;
+		}
+			return false;
+	}
 
 
 //	@Override
