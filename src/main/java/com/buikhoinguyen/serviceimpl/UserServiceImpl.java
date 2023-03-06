@@ -52,17 +52,21 @@ public class UserServiceImpl implements UserService {
 						.body("An exception occured due to email is existed");
 			}
 			Role userRole = roleRepository.findByName("User");
-			String hashPwd = passwordEncoder.encode(customer.getPwd());
-			customer.setPwd(hashPwd);
-			customer.setRole(userRole);
-			customer.setCreatedDate(LocalDateTime.now());
-			customer.setCreatedBy(customer.getName());
-			customer.setStatus(true);
-			savedCustomer = customerRepository.save(customer);
-			if (savedCustomer != null) {
-				response = ResponseEntity.status(HttpStatus.CREATED)
-						.body("Given user details are successfullty registered");
+			if(userRole.getId() > 0) {
+				String hashPwd = passwordEncoder.encode(customer.getPwd());
+				customer.setPwd(hashPwd);
+				customer.setRole(userRole);
+				customer.setCreatedDate(LocalDateTime.now());
+				customer.setCreatedBy(customer.getName());
+				customer.setStatus(true);
+				savedCustomer = customerRepository.save(customer);
+				if (savedCustomer != null) {
+					response = ResponseEntity.status(HttpStatus.CREATED)
+							.body("Given user details are successfullty registered");
+				}
 			}
+			return response = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("An exception occured due to user role is not existed");
 		} catch (Exception ex) {
 			response = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("An exception occured due to " + ex.getMessage());

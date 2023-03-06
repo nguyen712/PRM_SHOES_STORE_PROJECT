@@ -1,8 +1,6 @@
 package com.buikhoinguyen.model;
 
-import java.awt.Image;
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

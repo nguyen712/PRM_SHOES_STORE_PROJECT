@@ -23,6 +23,7 @@ import com.buikhoinguyen.entity.Shoes;
 import com.buikhoinguyen.entity.SizeShoes;
 import com.buikhoinguyen.model.ResponseShoesData;
 import com.buikhoinguyen.repository.CategoryRepository;
+import com.buikhoinguyen.repository.ImageRepository;
 import com.buikhoinguyen.repository.ShoesRepository;
 import com.buikhoinguyen.repository.SizeRepository;
 import com.buikhoinguyen.service.ShoesService;
@@ -40,6 +41,9 @@ public class ShoesServiceImpl implements ShoesService{
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
+	
+	@Autowired
+	private ImageRepository imageRepository;
 	
 	@Override
 	public ResponseEntity<String> createShoes(ShoesDTO shoesDTO) {
@@ -75,14 +79,14 @@ public class ShoesServiceImpl implements ShoesService{
 		List<Shoes> shoes = shoesRepository.findAll();
 		List<ResponseShoesData> shoesResponse = new ArrayList<>();
 		List<byte[]> shoesImageResponse = new ArrayList<>();
-		ByteArrayOutputStream outStreamObj = new ByteArrayOutputStream();
-		BufferedImage image ;
+		
 		
 		for (Shoes item : shoes) {
 			if(item.getImages().size() > 0) {
 				for (Image itemImg : item.getImages()) {
 					//image =  ImageIO.read(itemImg.getProfPic());
 					shoesImageResponse.add(itemImg.getProfPic());
+					
 					shoesResponse.add(
 							new ResponseShoesData(item.getDescription(),
 									item.getPrice(),

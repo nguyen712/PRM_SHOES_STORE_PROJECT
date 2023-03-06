@@ -1,7 +1,6 @@
 package com.buikhoinguyen.entity;
 
 
-import java.sql.Blob;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
