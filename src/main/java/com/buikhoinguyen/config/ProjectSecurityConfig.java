@@ -24,12 +24,12 @@ public class ProjectSecurityConfig {
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 		.authorizeHttpRequests()
-			.requestMatchers("/inActiveAccount","/myInformation/**", "/editProfile", "/inActiveAccount/**").hasAnyAuthority("User", "Admin")
-			.requestMatchers("/createShoes/**", "/createCategory", "/upload/**", "/createSize").hasAuthority("Admin")
-				.requestMatchers( "/role","/roles","/updateRole/{roleId}", "/deleteRole/{roleId}").hasAuthority("Admin")
-				.requestMatchers("/categories", "/updateCategory/{cateId}", "/deleteCategory/{cateId}").hasAuthority("Admin")
-				.requestMatchers("/shoes", "/updateShoes/{shoesId}", "/deleteShoes/{shoesId}").hasAuthority("Admin")
-			.requestMatchers("/shoes", "/notices", "/contacts", "/register", "/signin", "/reActiveAccount/**", "/createAdmin").permitAll()
+			.antMatchers("/inActiveAccount","/myInformation/**", "/editProfile", "/inActiveAccount/**").hasAnyAuthority("User", "Admin")
+			.antMatchers("/createShoes/**", "/createCategory", "/upload/**", "/createSize").hasAuthority("Admin")
+			.antMatchers( "/role","/roles","/updateRole/{roleId}", "/deleteRole/{roleId}").hasAuthority("Admin")
+			.antMatchers("/categories", "/updateCategory/{cateId}", "/deleteCategory/{cateId}").hasAuthority("Admin")
+			.antMatchers("/updateShoes/{shoesId}", "/deleteShoes/{shoesId}").hasAuthority("Admin")
+			.antMatchers("/shoes", "/notices", "/contacts", "/register", "/signin", "/reActiveAccount/**", "/createAdmin").permitAll()
 			.and().formLogin().loginProcessingUrl("/signin")
 			.and().httpBasic();
 		

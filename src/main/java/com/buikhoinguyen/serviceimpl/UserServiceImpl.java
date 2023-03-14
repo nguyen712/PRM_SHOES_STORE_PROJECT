@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 						.body("An exception occured due to email is existed");
 			}
 			Role userRole = roleRepository.findByName("User");
-			if(userRole.getId() > 0) {
+			if(userRole != null) {
 				String hashPwd = passwordEncoder.encode(customer.getPwd());
 				customer.setPwd(hashPwd);
 				customer.setRole(userRole);

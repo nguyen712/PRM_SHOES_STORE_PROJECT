@@ -12,6 +12,8 @@ import javax.imageio.ImageIO;
 import javax.swing.text.html.Option;
 
 import com.buikhoinguyen.dto.SizeShoesDTO;
+
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -78,35 +80,23 @@ public class ShoesServiceImpl implements ShoesService{
 
 	@Override
 	public List<ResponseShoesData> getAllShoes() {
-		List<Shoes> shoes = shoesRepository.findAll();
-		List<ResponseShoesData> shoesResponse = new ArrayList<>();
-		List<byte[]> shoesImageResponse = new ArrayList<>();
-		
-		
-		for (Shoes item : shoes) {
-			if(item.getImages().size() > 0) {
-				for (Image itemImg : item.getImages()) {
-					//image =  ImageIO.read(itemImg.getProfPic());
-					shoesImageResponse.add(itemImg.getProfPic());
-					
-					shoesResponse.add(
-							new ResponseShoesData(item.getDescription(),
-									item.getPrice(),
-									item.getCategory().getName(),
-									item.getSizeShoes().getFormatSize(),
-									item.getSizeShoes().getSizeShoes(),
-									item.getQuanity(),
-									item.getDiscount(),
-									item.getColors(),
-									item.getName(),
-									itemImg.getFileType(),
-									shoesImageResponse
-									)
-							);
-				}
-			}
+		List<Shoes> shoesList = shoesRepository.findAll();
+		List<ResponseShoesData> shoesRespond = new ArrayList<>();
+		for (Shoes shoes : shoesList) {
+			shoesRespond.add(new ResponseShoesData(shoes.getId(),
+					shoes.getDescription(),
+					shoes.getPrice(),
+					shoes.getCategory().getName(),
+					shoes.getSizeShoes().getFormatSize(),
+					shoes.getSizeShoes().getSizeShoes(),
+					shoes.getQuanity(),
+					shoes.getDiscount(),
+					shoes.getColors(),
+					shoes.getName(),
+					shoes.getImages()
+					));
 		}
-		return shoesResponse;
+		return shoesRespond;
 	}
 
 	@Override
@@ -165,48 +155,5 @@ public class ShoesServiceImpl implements ShoesService{
 		}
 			return false;
 	}
-
-
-//	@Override
-//	public ResponseEntity<String> createShoes(MultipartFile file, ShoesDTO shoes) throws IOException {
-//		String filename = StringUtils.cleanPath(file.getOriginalFilename());
-//		
-//		Shoes shoesDB = new Shoes();
-//		shoesDB.setCreatedDate(LocalDateTime.now());
-//		shoesDB.setName(shoes.getName() + filename);
-//		shoesDB.setColors(shoes.getColors());
-//		shoesDB.setDescription(shoes.getDescription());
-//		shoesDB.setDiscount(shoes.getDiscount());
-//		shoesDB.setQuanity(shoes.getQuanity());
-//		shoesDB.setStatus(true);
-//		Optional<Category> category = categoryRepository.findById(shoes.getCategoryId());
-//		if(category.isPresent()) {
-//			shoesDB.setCategory(category.get());
-//		}else {
-//			return new ResponseEntity<>("Category Id does not Exist", HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//		
-//		
-//		Optional<SizeShoes> size = sizeRepository.findById(shoes.getCategoryId());
-//		if(size.isPresent()) {
-//			shoesDB.setSizeShoes(size.get());
-//		}else {
-//			return new ResponseEntity<>("Size Id does not Exist", HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//		
-//		Shoes res = shoesRepository.save(shoesDB);
-//		
-//		
-//		Image image = new Image(file.getBytes(), shoesDB);
-//		
-//		image.setCreatedDate(LocalDateTime.now());
-//		image.setName(filename);
-//		image.setStatus(true);
-//		Image imgRes = imageRepository.save(image);
-//		if(res != null && imgRes != null) {
-//			return new ResponseEntity<String>("Upload shoes successfully", HttpStatus.CREATED);
-//		}
-//		return new ResponseEntity<String>("Upload shoes is not accepted", HttpStatus.INTERNAL_SERVER_ERROR);
-//	}
 
 }

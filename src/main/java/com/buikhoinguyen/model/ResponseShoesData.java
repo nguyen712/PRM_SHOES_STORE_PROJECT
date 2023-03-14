@@ -1,6 +1,9 @@
 package com.buikhoinguyen.model;
 
 import java.util.List;
+
+import com.buikhoinguyen.entity.Image;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -13,6 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ResponseShoesData {
+	private Long id;
 	private String description;
 	private double price;
 	private String categoryName;
@@ -22,7 +26,8 @@ public class ResponseShoesData {
 	private double discount;
 	private String[] colors;
 	private String name;
-	private String fileType;
-	//private List<Image> profic;
-	private List<byte[]> profic;
+//	private String fileType;
+//	//private List<Image> profic;
+//	private List<byte[]> profic;
+	private List<Image> profic;
 }
