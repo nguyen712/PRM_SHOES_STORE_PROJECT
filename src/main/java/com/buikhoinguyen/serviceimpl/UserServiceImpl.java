@@ -2,6 +2,7 @@ package com.buikhoinguyen.serviceimpl;
 
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -107,19 +110,16 @@ public class UserServiceImpl implements UserService {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
 
+	
 	@Override
 	public ResponseEntity<CustomerDTO> authenticateUser(LoginDTO loginDto) {
 		
 		List<Customer> customer = customerRepository.findByEmailAndStatus(loginDto.getUsernameOrEmail(), true);
-		if(customer.size() > 0) {
-			Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-	                loginDto.getUsernameOrEmail(), loginDto.getPassword()));
-
-	        SecurityContextHolder.getContext().setAuthentication(authentication);
-	        CustomerDTO res = modelMapper.map(customer, CustomerDTO.class);
-	        return new ResponseEntity<CustomerDTO>(res, HttpStatus.OK);
-		}
 		
+		if(customer.size() > 0) {
+		        CustomerDTO res = modelMapper.map(customer.get(0), CustomerDTO.class);
+		        return new ResponseEntity<CustomerDTO>(res, HttpStatus.OK);
+		}
 		return new ResponseEntity<CustomerDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 

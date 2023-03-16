@@ -29,8 +29,9 @@ public class ProjectSecurityConfig {
 			.antMatchers( "/role","/roles","/updateRole/{roleId}", "/deleteRole/{roleId}").hasAuthority("Admin")
 			.antMatchers("/categories", "/updateCategory/{cateId}", "/deleteCategory/{cateId}").hasAuthority("Admin")
 			.antMatchers("/updateShoes/{shoesId}", "/deleteShoes/{shoesId}").hasAuthority("Admin")
-			.antMatchers("/shoes", "/notices", "/contacts", "/register", "/signin", "/reActiveAccount/**", "/createAdmin").permitAll()
-			.and().formLogin().loginProcessingUrl("/signin")
+			.antMatchers("/shoes", "/notices", "/contacts", "/register", "/reActiveAccount/**", "/createAdmin").permitAll()
+			.antMatchers("/user").authenticated()
+			.and().formLogin()
 			.and().httpBasic();
 		
 		return http.build();

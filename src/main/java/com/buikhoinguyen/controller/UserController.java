@@ -43,8 +43,8 @@ public class UserController {
 		return userService.editProfile(customer);
 	}
 	
-	@PostMapping("/signin")
-	public ResponseEntity<CustomerDTO> authenticateUser(@RequestBody LoginDTO loginDto){
+	@PostMapping("/user")
+	public ResponseEntity<CustomerDTO> getUserDetailsAfterLogin(@RequestBody LoginDTO loginDto){
 		return userService.authenticateUser(loginDto);
     } 
 	
