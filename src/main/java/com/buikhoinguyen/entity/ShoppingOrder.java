@@ -1,50 +1,67 @@
 package com.buikhoinguyen.entity;
 
-import java.time.LocalDate;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
+@Table(name = "shopping_order")
 public class ShoppingOrder {
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO, generator = "native")
-	@GenericGenerator(name = "native", strategy = "native")
-	private Long id;
-	
-	@Column(nullable = true)
-	private String name;
-	
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "customer_id")
-	private Customer customer;
-	
-	@Column(nullable = true)
-    @CreatedDate
-    private LocalDate createdDate;
 
-    @Column(nullable = true)
-    @LastModifiedBy
-    private String modifiedBy;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(nullable = true)
-    @LastModifiedDate
-    private LocalDate modifiedDate;
-    
-    @Column
-	private boolean status;
-    
-    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
+    @OneToMany(mappedBy = "shoppingOrder", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ShoppingDetail> shoppingDetails = new ArrayList<>();
+
+    @Column(name = "checked_out")
+    private boolean checkedOut;
+
+
+    public ShoppingOrder(Customer customer) {
+        this.customer = customer;
+    }
+    public ShoppingOrder() {
+    }
+    public boolean isCheckedOut() {
+        return checkedOut;
+    }
+
+    public void setCheckedOut(boolean checkedOut) {
+        this.checkedOut = checkedOut;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public List<ShoppingDetail> getShoppingDetails() {
+        return shoppingDetails;
+    }
+
+    public void setShoppingDetails(List<ShoppingDetail> shoppingDetails) {
+        this.shoppingDetails = shoppingDetails;
+    }
 }
+
+
+

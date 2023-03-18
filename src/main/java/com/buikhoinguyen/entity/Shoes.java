@@ -52,4 +52,6 @@ public class Shoes extends BasedEntity{
 	@OneToMany(mappedBy = "shoes")
 	@JsonIgnore
 	private List<Image> images = new ArrayList<>();
+
+
 }
